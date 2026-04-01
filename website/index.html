@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De Geheime Code van Professor Kwarts</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+      color: #eaeaea;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sterren achtergrond */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+        radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 370px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 450px 100px, rgba(255,255,255,0.5), transparent);
+      background-size: 500px 200px;
+      animation: twinkle 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+
+    .crystal-icon {
+      font-size: 64px;
+      display: block;
+      margin-bottom: 15px;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(245, 197, 24, 0.5)); }
+      50% { filter: drop-shadow(0 0 25px rgba(245, 197, 24, 0.8)); }
+    }
+
+    h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 1.8em;
+      color: #f5c518;
+      text-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1em;
+      color: #94b3fd;
+      font-style: italic;
+    }
+
+    .story-box {
+      background: rgba(22, 33, 62, 0.8);
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+      line-height: 1.7;
+      font-size: 1.05em;
+    }
+
+    .story-box .highlight {
+      color: #f5c518;
+      font-weight: bold;
+    }
+
+    .progress-bar {
+      background: #16213e;
+      border-radius: 20px;
+      height: 20px;
+      margin: 20px 0;
+      overflow: hidden;
+      border: 1px solid #0f3460;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #f5c518, #ffd700);
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px rgba(245, 197, 24, 0.5);
+    }
+
+    .progress-text {
+      text-align: center;
+      color: #94b3fd;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 5px;
+    }
+
+    .code-section {
+      background: rgba(22, 33, 62, 0.8);
+      border: 2px solid #f5c518;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 25px 0;
+      text-align: center;
+    }
+
+    .code-section h2 {
+      font-family: 'Courier New', monospace;
+      color: #f5c518;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+
+    .code-input {
+      width: 100%;
+      max-width: 350px;
+      background: #16213e;
+      border: 2px solid #f5c518;
+      color: #f5c518;
+      font-family: 'Courier New', monospace;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 4px;
+      padding: 15px;
+      border-radius: 8px;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    .code-input::placeholder {
+      color: rgba(245, 197, 24, 0.4);
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    .code-input:focus {
+      box-shadow: 0 0 15px rgba(245, 197, 24, 0.3);
+    }
+
+    .btn {
+      display: inline-block;
+      background: #f5c518;
+      color: #1a1a2e;
+      border: 2px solid #f5c518;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.1em;
+      padding: 12px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #ffd700;
+      box-shadow: 0 0 20px rgba(245, 197, 24, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-hint {
+      background: transparent;
+      color: #94b3fd;
+      border: 1px solid #94b3fd;
+      font-size: 0.9em;
+      padding: 8px 20px;
+      margin-top: 20px;
+    }
+
+    .btn-hint:hover {
+      background: rgba(148, 179, 253, 0.1);
+      box-shadow: 0 0 10px rgba(148, 179, 253, 0.3);
+    }
+
+    .feedback {
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback.success {
+      border-left: 4px solid #4ecca3;
+      background: rgba(78, 204, 163, 0.1);
+      display: block;
+    }
+
+    .feedback.error {
+      border-left: 4px solid #e94560;
+      background: rgba(233, 69, 96, 0.1);
+      display: block;
+    }
+
+    .feedback.hint {
+      border-left: 4px solid #94b3fd;
+      background: rgba(148, 179, 253, 0.1);
+      display: block;
+    }
+
+    .feedback .icon {
+      font-size: 2em;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .feedback .title {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .feedback.success .title { color: #4ecca3; }
+    .feedback.error .title { color: #e94560; }
+    .feedback.hint .title { color: #94b3fd; }
+
+    .next-step {
+      background: rgba(15, 52, 96, 0.6);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      border: 1px solid #0f3460;
+    }
+
+    .next-step .label {
+      color: #f5c518;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .log {
+      margin-top: 30px;
+    }
+
+    .log h3 {
+      font-family: 'Courier New', monospace;
+      color: #94b3fd;
+      margin-bottom: 15px;
+    }
+
+    .log-entry {
+      background: rgba(22, 33, 62, 0.5);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 3px solid #4ecca3;
+      font-size: 0.95em;
+    }
+
+    .log-entry .step {
+      color: #f5c518;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+
+    /* Eindpagina */
+    .victory {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .victory .trophy {
+      font-size: 80px;
+      animation: bounce 1s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .victory h1 {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+
+    .victory .final-score {
+      background: rgba(22, 33, 62, 0.8);
+      border: 2px solid #f5c518;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 300px;
+    }
+
+    .victory .final-score .score {
+      font-family: 'Courier New', monospace;
+      font-size: 2em;
+      color: #f5c518;
+    }
+
+    .victory .final-score .rank {
+      color: #94b3fd;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: rgba(234, 234, 234, 0.4);
+      font-size: 0.85em;
+    }
+
+    /* Confetti */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      animation: confetti-fall 3s linear forwards;
+      z-index: 1000;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        top: 100vh;
+        transform: rotate(720deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="crystal-icon">🔮</span>
+      <h1>DE GEHEIME CODE VAN PROFESSOR KWARTS</h1>
+      <p class="subtitle">Kraak de codes. Vind de schat.</p>
+    </header>
+
+    <!-- Startpagina -->
+    <div id="startPage">
+      <div class="story-box">
+        Professor Kwarts is <span class="highlight">verdwenen</span>. Niemand weet waar ze is.
+        Maar ze heeft <span class="highlight">10 geheime codes</span> achtergelaten.
+        <br><br>
+        Jullie taak: ontcijfer elke code en vind de <span class="highlight">Kwartssteen</span>.
+        In elke envelop zit een puzzel. Los de puzzel op en voer de code hieronder in.
+        <br><br>
+        Zijn jullie klaar? Dan beginnen we.
+      </div>
+
+      <div class="code-section">
+        <h2>🔮 CODE INVOEREN</h2>
+        <input type="text" class="code-input" id="codeInput" placeholder="Typ je code hier..." autocomplete="off">
+        <br>
+        <button class="btn" onclick="checkCode()">CONTROLEER</button>
+        <br>
+        <button class="btn btn-hint" onclick="showHint()">💡 Ik wil een hint</button>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+      <div id="hintBox" class="feedback hint" style="display:none;"></div>
+    </div>
+
+    <!-- Voortgang -->
+    <div id="progressSection" style="display:none;">
+      <div class="progress-text">Stap <span id="currentStep">1</span> van 10</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div class="log" id="logSection" style="display:none;">
+      <h3>📜 Speurderslogboek</h3>
+      <div id="logEntries"></div>
+    </div>
+
+    <!-- Eindpagina -->
+    <div id="victoryPage" style="display:none;" class="victory">
+      <div class="trophy">🏆</div>
+      <h1>GEFELICITEERD!</h1>
+      <p style="font-size: 1.2em; margin-bottom: 20px;">
+        Jullie hebben de <span class="highlight">Kwartssteen</span> gevonden!
+      </p>
+      <div class="story-box">
+        Professor Kwarts is trots op jullie! Jullie zijn de slimste speurneuzen
+        die er bestaan. De Kwartssteen is nu van jullie.
+        <br><br>
+        <em>"Elke code kan gekraakt worden als je maar slim genoeg bent."</em>
+        <br>— Professor Mira Kwarts
+      </div>
+      <div class="final-score">
+        <div class="score">10/10</div>
+        <div class="rank">⭐ Rang: Meester-Speurneus ⭐</div>
+      </div>
+    </div>
+
+    <footer>
+      De Geheime Code van Professor Kwarts — Hybride Kinderfeestje Systeem
+    </footer>
+  </div>
+
+  <script>
+    const codes = {
+      'KWARTS-01': {
+        step: 1,
+        title: 'WELKOM, SPEURNUZEN!',
+        message: 'Professor Kwarts heeft jullie verwacht.',
+        next: 'Ga naar de KEUKEN. Daar ligt iets bijzonders onder de rode theedoek.',
+        nextAction: 'Zoek ENVELOP 2',
+        hint: 'De code staat in de brief van Professor Kwarts. Zoek de dikke gedrukte tekst.'
+      },
+      'HELP': {
+        step: 2,
+        title: 'GOED GEDAAN!',
+        message: 'Professor Kwarts vroeg om hulp! Maar ze heeft meer achtergelaten...',
+        next: 'Ga naar de WOONKAMER — achter het grootste kussen.',
+        nextAction: 'Zoek ENVELOP 3',
+        hint: 'Elk cijfer staat voor een letter. 8 is de 8e letter van het alfabet.'
+      },
+      'SLEUTEL': {
+        step: 3,
+        title: 'UITSTEKEND!',
+        message: 'De sleutel zit onder de trap — letterlijk!',
+        next: 'Ga ONDER DE TRAP. Daar ligt een kleine envelop.',
+        nextAction: 'Zoek ENVELOP 4',
+        hint: 'Sommige teksten kun je alleen lezen in een spiegel. Waar vind je een spiegel?'
+      },
+      'BOOM': {
+        step: 4,
+        title: 'BRILJANT!',
+        message: 'Professor Kwarts hield van de natuur.',
+        next: 'Ga naar de TUIN (of het balkon). Er hangt iets aan iets groens.',
+        nextAction: 'Zoek ENVELOP 5',
+        hint: 'Gebruik de decoderkaart. Begin met het symbool dat het vaakst voorkomt.'
+      },
+      'STERREN': {
+        step: 5,
+        title: 'PERFECT!',
+        message: 'De sterren wijzen altijd de weg.',
+        next: 'Ga naar de ZOLDER. Het cijferslot is: 7-3-9-1',
+        nextAction: 'Open het slotje → Zoek ENVELOP 6',
+        hint: 'Lees de plaatjes van links naar rechts. Ze vormen samen woorden.'
+      },
+      'RITS': {
+        step: 6,
+        title: 'SLIM GEDAAN!',
+        message: 'Een rits — tanden die niet bijten!',
+        next: 'Ga naar de BADKAMER. Zoek in een potje of doosje.',
+        nextAction: 'Zoek ENVELOP 7',
+        hint: 'Wat in je kledingkast heeft tanden maar kan niet bijten?'
+      },
+      'DEUR': {
+        step: 7,
+        title: 'ECHTE DETECTIVES!',
+        message: 'Jullie hebben de deur gevonden!',
+        next: 'Ga naar de GANG (bij de voordeur). Iets laag bij de grond.',
+        nextAction: 'Zoek ENVELOP 8',
+        hint: 'De X-en op de plattegrond komen overeen met echte plekken in het huis.'
+      },
+      'KRISTAL': {
+        step: 8,
+        title: 'HET KRISTAL!',
+        message: 'Jullie hebben het gevonden! Nog 2 stappen te gaan.',
+        next: 'Ga naar de TV-HOEK. Zoek tussen de kussens.',
+        nextAction: 'Zoek ENVELOP 9',
+        hint: 'Lees elk plaatje als letter(s). KR + oog + staart + elleboog?'
+      },
+      'BEGIN': {
+        step: 9,
+        title: 'WAAR HET BEGON!',
+        message: 'Jullie zijn er bijna!',
+        next: 'Ga TERUG NAAR DE STARTTABEL — waar het allemaal begon!',
+        nextAction: 'Zoek ENVELOP 10',
+        hint: 'Los eerst alle woorden op. De gemarkeerde letters vormen de oplossing.'
+      },
+      'KWARTS': {
+        step: 10,
+        title: '🎉 GEFELICITEERD! 🎉',
+        message: 'JULLIE HEBBEN DE KWARTSSTEEN GEVONDEN!',
+        next: null,
+        nextAction: null,
+        hint: null
+      }
+    };
+
+    let currentStep = 1;
+    let log = [];
+
+    function checkCode() {
+      const input = document.getElementById('codeInput');
+      const code = input.value.trim().toUpperCase();
+      const feedback = document.getElementById('feedback');
+
+      if (!code) {
+        feedback.className = 'feedback error';
+        feedback.innerHTML = '<span class="icon">❌</span><div class="title">LEEG VELD</div><p>Voer eerst een code in.</p>';
+        return;
+      }
+
+      if (codes[code]) {
+        const data = codes[code];
+        
+        if (data.step < currentStep) {
+          feedback.className = 'feedback error';
+          feedback.innerHTML = '<span class="icon">⏳</span><div class="title">AL GEDAAN</div><p>Deze code hebben jullie al gekraakt! Voer de nieuwste code in.</p>';
+          return;
+        }
+
+        if (data.step > currentStep) {
+          feedback.className = 'feedback error';
+          feedback.innerHTML = '<span class="icon">🚫</span><div class="title">NOG NIET</div><p>Deze code is voor later. Los eerst de huidige puzzel op.</p>';
+          return;
+        }
+
+        // Correcte code!
+        currentStep = data.step + 1;
+        
+        // Update voortgang
+        document.getElementById('progressSection').style.display = 'block';
+        document.getElementById('currentStep').textContent = Math.min(currentStep, 10);
+        document.getElementById('progressFill').style.width = (data.step * 10) + '%';
+
+        // Log toevoegen
+        log.push({ step: data.step, code: code });
+        updateLog();
+
+        if (data.step === 10) {
+          // VICTORY!
+          showVictory();
+        } else {
+          // Normale feedback
+          feedback.className = 'feedback success';
+          feedback.innerHTML = `
+            <span class="icon">✅</span>
+            <div class="title">${data.title}</div>
+            <p>${data.message}</p>
+            <div class="next-step">
+              <div class="label">🔍 VOLGENDE STAP:</div>
+              <p>${data.next}</p>
+              <p><strong>${data.nextAction}</strong></p>
+            </div>
+          `;
+        }
+
+        // Hint verbergen
+        document.getElementById('hintBox').style.display = 'none';
+        input.value = '';
+      } else {
+        feedback.className = 'feedback error';
+        feedback.innerHTML = '<span class="icon">❌</span><div class="title">FOUTE CODE</div><p>Die code klopt niet. Controleer of je het goed hebt geschreven.<br>Hint: hoofdletters en streepjes doen ertoe.</p>';
+      }
+    }
+
+    function showHint() {
+      const hintBox = document.getElementById('hintBox');
+      const stepData = Object.values(codes).find(c => c.step === currentStep);
+      
+      if (stepData && stepData.hint) {
+        hintBox.className = 'feedback hint';
+        hintBox.innerHTML = `
+          <span class="icon">💡</span>
+          <div class="title">HINT — Stap ${currentStep}</div>
+          <p>${stepData.hint}</p>
+        `;
+        hintBox.style.display = 'block';
+      } else {
+        hintBox.className = 'feedback hint';
+        hintBox.innerHTML = '<span class="icon">💡</span><div class="title">GEEN HINT BESCHIKBAAR</div><p>Je hebt alle hints al gezien of het spel is afgelopen.</p>';
+        hintBox.style.display = 'block';
+      }
+    }
+
+    function updateLog() {
+      const logSection = document.getElementById('logSection');
+      const logEntries = document.getElementById('logEntries');
+      logSection.style.display = 'block';
+      
+      logEntries.innerHTML = log.map(entry => `
+        <div class="log-entry">
+          <span class="step">Stap ${entry.step}</span> — Code gekraakt: <strong>${entry.code}</strong> ✅
+        </div>
+      `).join('');
+    }
+
+    function showVictory() {
+      document.getElementById('startPage').style.display = 'none';
+      document.getElementById('victoryPage').style.display = 'block';
+      document.getElementById('progressFill').style.width = '100%';
+      
+      // Confetti!
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const colors = ['#f5c518', '#e94560', '#4ecca3', '#94b3fd', '#ffd700', '#ff6b6b'];
+      for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+          const piece = document.createElement('div');
+          piece.className = 'confetti-piece';
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+          piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+          piece.style.animationDelay = Math.random() * 0.5 + 's';
+          document.body.appendChild(piece);
+          setTimeout(() => piece.remove(), 4000);
+        }, i * 30);
+      }
+    }
+
+    // Enter-toe-toets
+    document.getElementById('codeInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') checkCode();
+    });
+  </script>
+</body>
+</html>
